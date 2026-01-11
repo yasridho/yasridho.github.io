@@ -72,57 +72,243 @@ import Layout from '../layouts/BlogPost.astro';
 
 
 
-    <h2 class="text-2xl font-bold text-ctp-mauve mt-8 mb-4">Project Experience</h2>
-
-    <h3 class="text-xl font-bold text-ctp-blue mt-6 mb-2"><strong>Project 1: Malware Analysis & Simulation (Reverse HTTPS Stager)</strong></h3>
-
-    <p class="mb-4">
-
-        <strong>Objective:</strong> Conduct a full-lifecycle analysis of a custom-generated malware payload to understand its behavior, infection chain, and persistence mechanisms in a controlled environment. <br>
-
-        <strong>Tools Used:</strong> MSFVenom, Flare-VM, Process Monitor, Wireshark, ProcDot, VirusTotal.
-
-    </p>
+        <h2 class="text-2xl font-bold text-ctp-mauve mt-8 mb-4">Project Experience</h2>
 
 
 
-    <p class="mb-2"><strong>Methodology:</strong></p>
-
-    <ol class="list-decimal pl-8 mb-4 space-y-2">
-
-        <li><strong>Malware Creation:</strong> Generated a Meterpreter payload (<code>ysrdh.exe</code>) using <code>msfvenom</code> configured for Reverse HTTPS communication.</li>
-
-        <li><strong>Sandbox Execution (Flare-VM):</strong> Detonated the payload in a hardened Windows environment while running real-time monitoring tools.</li>
-
-        <li><strong>Behavioral Monitoring:</strong>
-
-            <ul class="list-disc pl-8 mt-2 space-y-1">
-
-                <li><strong>Registry Analysis:</strong> Identified security lowering modifications (e.g., <code>ZoneMap</code> changes).</li>
-
-                <li><strong>Network Analysis:</strong> Captured encrypted C2 traffic on port 8080.</li>
-
-                <li><strong>Process Analysis:</strong> Observed process migration to legitimate system processes (e.g., <code>explorer.exe</code>).</li>
-
-            </ul>
-
-        </li>
-
-        <li><strong>Visualization:</strong> Utilized <strong>ProcDot</strong> to generate a visual graph of the infection timeline.</li>
-
-    </ol>
+        
 
 
 
-    <p class="mb-4"><strong>Outcome:</strong></p>
+        <div class="space-y-8">
 
-    <ul class="list-disc pl-8 mb-8 space-y-2">
 
-        <li>Successfully mapped the attack lifecycle and identified clear <strong>IOCs</strong>.</li>
 
-        <li>Produced a detailed technical report <a href="/blog/malware-analysis-flare-vm" class="text-ctp-blue underline decoration-dashed hover:text-ctp-mauve">Read Full Report Here</a>.</li>
+            <section>
 
-    </ul>
+
+
+                <h3 class="text-xl font-bold text-ctp-blue mb-2"><strong>Project 1: Behavioral Analysis - Reverse HTTPS Stager</strong></h3>
+
+
+
+                <p class="mb-4">
+
+
+
+                    <strong>Objective:</strong> Conduct a full-lifecycle analysis of a framework-generated malware payload to identify reliable behavioral artifacts and Indicators of Compromise (IoCs). <br>
+
+
+
+                    <strong>Tools Used:</strong> MSFVenom, Flare-VM, Process Monitor, Wireshark, ProcDot, VirusTotal.
+
+
+
+                </p>
+
+
+
+                <p class="mb-2"><strong>Key Outcomes:</strong></p>
+
+
+
+                <ul class="list-disc pl-8 mb-4 space-y-1">
+
+
+
+                    <li>Successfully mapped the attack lifecycle and identified stealthy registry modifications (e.g., <code>ZoneMap</code> tampering).</li>
+
+
+
+                    <li>Analyzed encrypted C2 traffic on port 8080 and observed process migration to legitimate system processes.</li>
+
+
+
+                    <li>Produced a detailed technical report with cross-platform detection strategies <a href="/blog/malware-analysis-flare-vm" class="text-ctp-blue underline decoration-dashed hover:text-ctp-mauve">Read Full Report Here</a>.</li>
+
+
+
+                </ul>
+
+
+
+            </section>
+
+
+
+    
+
+
+
+            <section>
+
+
+
+                <h3 class="text-xl font-bold text-ctp-blue mb-2"><strong>Project 2: Security Audit - Windows Server Infrastructure</strong></h3>
+
+
+
+                <p class="mb-4">
+
+
+
+                    <strong>Objective:</strong> Perform a configuration security audit on a Windows Server 2008 R2 (Metasploitable 3) environment to identify and mitigate critical misconfigurations. <br>
+
+
+
+                    <strong>Tools Used:</strong> Nmap, Metasploit, Evil-WinRM, Snmpwalk.
+
+
+
+                </p>
+
+
+
+                <p class="mb-2"><strong>Key Outcomes:</strong></p>
+
+
+
+                <ul class="list-disc pl-8 mb-4 space-y-1">
+
+
+
+                    <li>Identified and exploited Elasticsearch RCE (CVE-2014-3120) and WinRM default credential flaws.</li>
+
+
+
+                    <li>Conducted deep service enumeration via SNMP MIB walking to extract system information.</li>
+
+
+
+                    <li>Provided comprehensive hardening recommendations for service isolation and secure identity management <a href="/blog/security-audit-configuration-and-mitigation" class="text-ctp-blue underline decoration-dashed hover:text-ctp-mauve">Read Full Report Here</a>.</li>
+
+
+
+                </ul>
+
+
+
+            </section>
+
+
+
+    
+
+
+
+            <section>
+
+
+
+                <h3 class="text-xl font-bold text-ctp-blue mb-2"><strong>Project 3: Vulnerability Assessment - OWASP Juice Shop</strong></h3>
+
+
+
+                <p class="mb-4">
+
+
+
+                    <strong>Objective:</strong> Conduct an end-to-end VAPT focusing on Broken Access Control (A01:2021) in a modern web architecture. <br>
+
+
+
+                    <strong>Tools Used:</strong> Burp Suite, Firefox Developer Tools.
+
+
+
+                </p>
+
+
+
+                <p class="mb-2"><strong>Key Outcomes:</strong></p>
+
+
+
+                <ul class="list-disc pl-8 mb-4 space-y-1">
+
+
+
+                    <li>Demonstrated business logic bypasses including Payment Bypass via DOM manipulation and Admin Account Takeover.</li>
+
+
+
+                    <li>Identified multiple Insecure Direct Object Reference (IDOR) flaws in the shopping basket functionality.</li>
+
+
+
+                    <li>Recommended server-side implicit identity derivation and object-level access control (OLAC) <a href="/blog/broken-access-control-juice-shop" class="text-ctp-blue underline decoration-dashed hover:text-ctp-mauve">Read Full Report Here</a>.</li>
+
+
+
+                </ul>
+
+
+
+            </section>
+
+
+
+    
+
+
+
+            <section>
+
+
+
+                <h3 class="text-xl font-bold text-ctp-blue mb-2"><strong>Project 4: CTF Writeup - FORESTY101</strong></h3>
+
+
+
+                <p class="mb-4">
+
+
+
+                    <strong>Objective:</strong> Provide comprehensive solutions for challenges in the Foresty101 CTF competition across Web, Crypto, and Forensics categories. <br>
+
+
+
+                    <strong>Tools Used:</strong> Wireshark, John the Ripper, Binwalk, strings.
+
+
+
+                </p>
+
+
+
+                <p class="mb-2"><strong>Key Outcomes:</strong></p>
+
+
+
+                <ul class="list-disc pl-8 mb-4 space-y-1">
+
+
+
+                    <li>Solved Binary Exploitation challenges by leveraging shell execution redirection techniques.</li>
+
+
+
+                    <li>Performed deep packet inspection (DPI) on network traffic to extract sensitive POST parameters and credentials.</li>
+
+
+
+                    <li>Decoded multi-layered obfuscation and identification of hidden data in forensic artifacts <a href="/blog/kuba-palak-ctf-writeup" class="text-ctp-blue underline decoration-dashed hover:text-ctp-mauve">Read Full Report Here</a>.</li>
+
+
+
+                </ul>
+
+
+
+            </section>
+
+
+
+        </div>
+
+
+
+    
 
 
 

@@ -76,23 +76,55 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
                 <div class="section-header">03_MISSION_LOGS.dat</div>
                 
                 <div class="project-card">
-                    <h3>🦠 Featured Project: Malware Analysis & Simulation</h3>
-                    <p><strong>Objective:</strong> End-to-end technical analysis of a custom <strong>Reverse HTTPS Stager</strong> to emulate advanced persistent threat (APT) behaviors.</p>
+                    <h3>🦠 Behavioral Analysis: Reverse HTTPS Stager</h3>
+                    <p><strong>Objective:</strong> Identify behavioral Indicators of Compromise (IoCs) for framework-generated payloads in a hardened sandbox.</p>
                     <ul class="list-none p-0 text-ctp-subtext0 mb-4">
-                        <li>&gt; <strong>Execution:</strong> Detonated <code>ysrdh.exe</code> payload in a hardened <strong>Flare-VM</strong> sandbox environment.</li>
-                        <li>&gt; <strong>Analysis:</strong> Utilized <strong>Procmon</strong> and <strong>Wireshark</strong> to map process injection and C2 communication (Port 8080).</li>
-                        <li>&gt; <strong>Reporting:</strong> Documented IOCs, registry modifications (<code>ZoneMap</code>), and persistence mechanisms.</li>
+                        <li>&gt; <strong>Environment:</strong> Conducted dynamic analysis within an isolated <strong>Flare-VM</strong> instance.</li>
+                        <li>&gt; <strong>Findings:</strong> Captured C2 heartbeat traffic (Port 8080) and identified stealthy <code>ZoneMap</code> registry tampering.</li>
+                        <li>&gt; <strong>Outcome:</strong> Developed cross-platform detection strategies based on process migration artifacts.</li>
                     </ul>
-                    <a href="/blog/malware-analysis-flare-vm" class="malware-report-btn">VIEW TECHNICAL REPORT & IOCs &gt;&gt;</a>
+                    <a href="/blog/malware-analysis-flare-vm" class="malware-report-btn">VIEW TECHNICAL REPORT &gt;&gt;</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>🛡️ Security Audit: Windows Server Infrastructure</h3>
+                    <p><strong>Objective:</strong> Technical audit of Windows Server 2008 R2 (Metasploitable 3) to identify and mitigate critical misconfigurations.</p>
+                    <ul class="list-none p-0 text-ctp-subtext0 mb-4">
+                        <li>&gt; <strong>Vulnerabilities:</strong> Exploited Elasticsearch RCE (CVE-2014-3120) and WinRM default credential flaws.</li>
+                        <li>&gt; <strong>Reconnaissance:</strong> Utilized Nmap and Snmpwalk for deep service enumeration and MIB walking.</li>
+                        <li>&gt; <strong>Remediation:</strong> Provided actionable hardening guides for service isolation and identity management.</li>
+                    </ul>
+                    <a href="/blog/security-audit-configuration-and-mitigation" class="inline-block mt-4 border border-ctp-blue text-ctp-blue px-4 py-2 font-bold rounded text-sm transition-colors duration-200 hover:bg-ctp-blue hover:text-ctp-base">VIEW AUDIT REPORT &gt;&gt;</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>🛒 Vulnerability Assessment: OWASP Juice Shop</h3>
+                    <p><strong>Objective:</strong> End-to-end VAPT focusing on Broken Access Control (A01:2021) in a modern web architecture.</p>
+                    <ul class="list-none p-0 text-ctp-subtext0 mb-4">
+                        <li>&gt; <strong>Exploitation:</strong> Demonstrated Payment Bypass via DOM manipulation and Admin Account Takeover.</li>
+                        <li>&gt; <strong>IDOR Analysis:</strong> Identified unauthorized cross-user basket access via insecure internal object references.</li>
+                        <li>&gt; <strong>Remediation:</strong> Recommended server-side session derivation and object-level access control (OLAC).</li>
+                    </ul>
+                    <a href="/blog/broken-access-control-juice-shop" class="inline-block mt-4 border border-ctp-green text-ctp-green px-4 py-2 font-bold rounded text-sm transition-colors duration-200 hover:bg-ctp-green hover:text-ctp-base">VIEW ASSESSMENT &gt;&gt;</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>🚩 CTF Writeup: FORESTY101</h3>
+                    <p><strong>Objective:</strong> Comprehensive solutions for the Foresty101 CTF competition across Web, Crypto, and Forensics.</p>
+                    <ul class="list-none p-0 text-ctp-subtext0 mb-4">
+                        <li>&gt; <strong>Highlights:</strong> Solved Binary Exploitation via shell execution redirection and identified hidden Base64 payloads.</li>
+                        <li>&gt; <strong>Forensics:</strong> Performed network traffic analysis using Wireshark to extract POST-based credentials.</li>
+                    </ul>
+                    <a href="/blog/kuba-palak-ctf-writeup" class="inline-block mt-4 border border-ctp-mauve text-ctp-mauve px-4 py-2 font-bold rounded text-sm transition-colors duration-200 hover:bg-ctp-mauve hover:text-ctp-base">VIEW WRITEUP &gt;&gt;</a>
                 </div>
         
-                <div class="project-card">
-                    <h3>💻 Technical Tools & Research</h3>
-                    <p class="mb-1.5">Building specialized tools for security research and data integrity.</p>
+                <div class="project-card border-t border-ctp-surface0 pt-8">
+                    <h3>💻 Technical Research & Tooling</h3>
+                    <p class="mb-1.5">Developing specialized tools for security research and data integrity.</p>
                     <p>
                         <strong><a href="https://github.com/yasridho/HashingComparison">[LINK] Database Vulnerability Inspector</a></strong><br />
                         <span class="tag">Security Education</span> <span class="tag">SvelteKit</span> <span class="tag">Cryptography</span><br />
-                        <span class="text-[0.8em] text-ctp-subtext0">An educational tool demonstrating the security impact of different password storage methods. Compares <strong>Plaintext</strong> (Dangerous), <strong>MD5</strong> (Vulnerable), and <strong>Bcrypt</strong> (Secure) in real-time. Features a live database inspector to visualize hashes, salting, and work factors.</span>
+                        <span class="text-[0.8em] text-ctp-subtext0">An educational tool demonstrating the security impact of different password storage methods. Features a live database inspector to visualize hashes, salting, and work factors.</span>
                     </p>
                 </div>
             </div>
@@ -100,12 +132,12 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
             <div class="section">
                 <div class="section-header">04_CREDENTIALS.log</div>
                 <div class="mb-5">
-                    <p class="mb-1.5"><strong>&gt; Dibimbing.id, Cybersecurity Bootcamp</strong> <span class="text-ctp-subtext0 float-none md:float-right block md:inline">(Oct 2025 – Present)</span></p>
+                    <p class="mb-1.5"><strong>&gt; Dibimbing.id, Cybersecurity Bootcamp</strong> <span class="text-ctp-subtext0 float-none md:float-right block md:inline">(Oct 2025 - Present)</span></p>
                     <p class="text-ctp-subtext1 mt-0">Comprehensive training in Red Team operations, Blue Team defense strategies, and practical Malware Analysis.</p>
                 </div>
                 
                 <div>
-                    <p class="mb-1.5"><strong>&gt; Telkom University, Bachelor of Informatics</strong> <span class="text-ctp-subtext0 float-none md:float-right block md:inline">(Aug 2018 – Nov 2025)</span></p>
+                    <p class="mb-1.5"><strong>&gt; Telkom University, Bachelor of Informatics</strong> <span class="text-ctp-subtext0 float-none md:float-right block md:inline">(Aug 2018 - Nov 2025)</span></p>
                     <p class="text-ctp-subtext1 mt-0">Core Coursework: Operating Systems, Computer Networks, AI, Machine Learning.</p>
                 </div>
                 
