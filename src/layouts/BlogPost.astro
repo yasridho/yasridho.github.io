@@ -1,86 +1,334 @@
----
-import { Image } from 'astro:assets';
+--- 
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data'] & {
+    headings?: { depth: number; slug: string; text: string }[];
+};
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags, headings } = Astro.props;
 ---
 
 <html lang="en">
 	<head>
 		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
 	</head>
 
-	<body>
+	<body class="bg-ctp-base text-ctp-text font-mono leading-relaxed">
+        <!-- Progress Bar -->
+        <div class="fixed top-0 left-0 w-full h-1 bg-transparent z-[1000]">
+            <div id="progress-bar" class="h-full bg-ctp-mauve w-0 transition-[width] duration-100 shadow-[0_0_10px_theme(colors.ctp.mauve)]"></div>
+        </div>
+
 		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
+		<main class="w-full max-w-[1400px] mx-auto py-5 px-5 md:px-10 flex flex-col lg:flex-row relative gap-10">
+			<div class="flex-1 min-w-0 mx-auto max-w-[900px] w-full">
+                <article>
+                    <div class="w-full">
+                        <div class="mb-8 pb-4 text-left border-b border-dashed border-ctp-surface0">
+                            <div class="mb-4 text-ctp-subtext0 text-sm">
+                                <FormattedDate date={pubDate} />
+                                {
+                                    updatedDate && (
+                                        <div class="italic">
+                                            Last updated on <FormattedDate date={updatedDate} />
+                                        </div>
+                                    )
+                                }
+                            </div>
+                            <h1 class="m-0 text-4xl md:text-5xl text-ctp-mauve font-bold">{title}</h1>
+                            {tags && tags.length > 0 && (
+                                <div class="mt-2.5">
+                                    {tags.map((tag) => (
+                                        <span class="inline-block bg-ctp-surface0 text-ctp-blue px-2 py-0.5 rounded text-xs mr-2 font-mono">#{tag}</span>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        {heroImage && (
+                            <div class="w-full mb-8">
+                                <img src={heroImage} alt="" class="block mx-auto rounded border border-ctp-surface0 w-full h-auto" />
+                            </div>
+                        )}
+                        <div class="prose prose-ctp max-w-none prose-headings:text-ctp-mauve prose-a:text-ctp-blue prose-strong:text-ctp-lavender prose-code:text-ctp-pink prose-pre:bg-ctp-mantle">
+                            <slot />
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            {headings && headings.length > 0 && (
+                <>
+                    <aside id="toc-sidebar" class="
+                        lg:w-[280px] lg:flex-shrink-0 lg:sticky lg:top-[120px] lg:h-[calc(100vh-140px)] lg:order-first lg:opacity-100 lg:pointer-events-auto lg:translate-x-0
+                        fixed top-0 left-0 bottom-0 h-screen w-[300px] -translate-x-full transition-all duration-300 z-[1000] lg:z-50
+                        bg-ctp-mantle border-r lg:border border-ctp-surface0 lg:rounded-lg p-5 overflow-y-auto shadow-2xl lg:shadow-none
+                        [&.mobile-active]:translate-x-0 [&.desktop-hidden]:lg:w-0 [&.desktop-hidden]:lg:p-0 [&.desktop-hidden]:lg:border-none [&.desktop-hidden]:lg:opacity-0 [&.desktop-hidden]:lg:pointer-events-none
+                    ">
+                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-ctp-surface0">
+                            <span class="font-bold text-ctp-mauve text-sm uppercase tracking-wider">Table of Contents</span>
+                            <button id="close-toc" class="bg-none border-none text-ctp-red cursor-pointer font-bold">[X]</button>
+                        </div>
+                        <ul class="list-none p-0 m-0">
+                            {headings.map((heading) => (
+                                <li class={`mb-2 leading-relaxed toc-depth-${heading.depth} ${
+                                    heading.depth === 1 ? 'font-bold mt-4' : 
+                                    heading.depth === 2 ? 'font-semibold text-ctp-text' : 
+                                    heading.depth === 3 ? 'pl-4 text-sm border-l border-ctp-surface0' : 
+                                    'pl-8 text-sm border-l border-ctp-surface0'
+                                }`}>
+                                    <a href={`#${heading.slug}`} class="no-underline text-ctp-subtext0 text-sm hover:text-ctp-pink transition-colors border-none block">{heading.text}</a>
+                                </li>
+                            ))}
+                        </ul>
+                    </aside>
+                    <button id="toc-toggle" class="fixed bottom-8 left-8 bg-ctp-mauve text-ctp-base border-none rounded-full w-12 h-12 cursor-pointer shadow-lg z-[100] flex items-center justify-center font-bold text-xl transition-transform hover:scale-110 active:scale-95 lg:hover:bg-ctp-pink" aria-label="Toggle Table of Contents">
+                        ☰
+                    </button>
+                </>
+            )}
 		</main>
 		<Footer />
+
+        <script>
+            // --- Reading Progress Logic ---
+            const progressBar = document.getElementById('progress-bar');
+            
+            window.addEventListener('scroll', () => {
+                const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrollPercent = (scrollTop / scrollHeight) * 100;
+                
+                if (progressBar) {
+                    progressBar.style.width = scrollPercent + '%';
+                }
+            });
+
+            // --- ToC Logic ---
+            const tocSidebar = document.getElementById('toc-sidebar');
+            const tocToggle = document.getElementById('toc-toggle');
+            const closeToc = document.getElementById('close-toc');
+            
+            function initToc() {
+                const isMobile = window.innerWidth <= 1100;
+                if (isMobile) {
+                    tocSidebar?.classList.remove('desktop-hidden');
+                    tocSidebar?.classList.remove('mobile-active');
+                } else {
+                    const pref = localStorage.getItem('toc-visible');
+                    if (pref === 'false') {
+                        tocSidebar?.classList.add('desktop-hidden');
+                    } else {
+                        tocSidebar?.classList.remove('desktop-hidden');
+                    }
+                }
+            }
+
+            initToc();
+
+            tocToggle?.addEventListener('click', () => {
+                const isMobile = window.innerWidth <= 1100;
+                if (isMobile) {
+                    tocSidebar?.classList.toggle('mobile-active');
+                } else {
+                    tocSidebar?.classList.toggle('desktop-hidden');
+                    localStorage.setItem('toc-visible', (!tocSidebar?.classList.contains('desktop-hidden')).toString());
+                }
+            });
+
+            closeToc?.addEventListener('click', () => {
+                const isMobile = window.innerWidth <= 1100;
+                if (isMobile) {
+                    tocSidebar?.classList.remove('mobile-active');
+                } else {
+                    tocSidebar?.classList.add('desktop-hidden');
+                    localStorage.setItem('toc-visible', 'false');
+                }
+            });
+
+            // --- Code Block Enhancements ---
+            document.querySelectorAll('pre').forEach((pre) => {
+                const parent = pre.parentElement;
+                // Check if already wrapped (in case of re-runs or specific DOM structures)
+                if (!parent || parent.classList.contains('code-content')) return;
+
+                // Create Wrapper
+                const wrapper = document.createElement('div');
+                wrapper.className = 'code-wrapper';
+
+                // Create Header
+                const header = document.createElement('div');
+                header.className = 'code-header';
+                
+                // Language Label
+                const lang = pre.getAttribute('data-language') || 
+                             pre.className.match(/language-(\w+)/)?.[1] || 
+                             pre.querySelector('code')?.className.match(/language-(\w+)/)?.[1] || 
+                             'text';
+                const langLabel = document.createElement('span');
+                langLabel.className = 'lang-label';
+                langLabel.textContent = lang.toUpperCase();
+                langLabel.style.marginRight = 'auto'; // Push copy button to right
+                langLabel.style.opacity = '0.6';
+                
+                // Copy Button
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'copy-btn';
+                copyBtn.textContent = 'Copy';
+                
+                copyBtn.addEventListener('click', () => {
+                    let codeToCopy = '';
+                    
+                    if (['bash', 'sh', 'shell', 'zsh'].includes(lang.toLowerCase())) {
+                        // Smart copy for shell: only copy commands, strip prompts
+                        const lines = pre.innerText.split(/\r?\n/);
+                        const commands = lines
+                            .filter(line => /^\s*(\$|#)\s/.test(line)) // Filter lines starting with prompt
+                            .map(line => line.replace(/^\s*(\$|#)\s/, '')); // Strip the prompt
+                        
+                        // If valid commands found, copy them. Otherwise fallback to full text.
+                        if (commands.length > 0) {
+                            codeToCopy = commands.join('\n');
+                        } else {
+                            codeToCopy = pre.innerText;
+                        }
+                    } else {
+                        // Standard copy for other languages
+                        codeToCopy = pre.innerText;
+                    }
+
+                    navigator.clipboard.writeText(codeToCopy).then(() => {
+                        copyBtn.textContent = 'Copied!';
+                        setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+                    });
+                });
+                
+                header.appendChild(langLabel);
+                header.appendChild(copyBtn);
+                wrapper.appendChild(header);
+
+                // Content Container
+                const content = document.createElement('div');
+                content.className = 'code-content';
+
+                // Line Numbers
+                const lineNumbers = document.createElement('div');
+                lineNumbers.className = 'line-numbers';
+                const lines = pre.textContent?.split('\n').length || 0;
+                // Generate line numbers, but subtract 1 if the last line is empty (common in pre)
+                const finalLines = pre.textContent?.endsWith('\n') ? lines - 1 : lines;
+                
+                lineNumbers.innerHTML = Array.from({ length: finalLines }, (_, i) => i + 1).join('<br>');
+                
+                content.appendChild(lineNumbers);
+                
+                // Move pre into content
+                pre.parentNode?.insertBefore(wrapper, pre);
+                content.appendChild(pre);
+                wrapper.appendChild(content);
+
+                // --- Command/Output Styling for Shell ---
+                if (['bash', 'sh', 'shell', 'zsh'].includes(lang.toLowerCase())) {
+                    const codeElement = pre.querySelector('code');
+                    if (codeElement) {
+                        const lines = codeElement.innerHTML.split(/\r?\n/);
+                        
+                        const processedLines = lines.map(line => {
+                            // Create temp element to inspect text content safely
+                            const temp = document.createElement('div');
+                            temp.innerHTML = line;
+                            const text = temp.textContent || '';
+                            
+                            // Check for prompt at start (ignoring leading whitespace)
+                            const match = text.match(/^\s*(\$|#)\s/);
+                            
+                            if (match) {
+                                // It's a command
+                                // We need to make the prompt unselectable in the HTML
+                                // We'll try to replace the first occurrence of the prompt char in the HTML string
+                                // taking care not to break tags. This is tricky with regex on HTML.
+                                // A safe heuristic: strict replacement of the first $ or # that isn't inside a tag.
+                                
+                                // Simple approach: replace the first $ or # followed by space
+                                // This might hit a tag attribute if we are unlucky, but unlikely in code blocks.
+                                const promptChar = match[1];
+                                const enhancedLine = line.replace(promptChar, `<span class="command-prompt">${promptChar}</span>`);
+                                return `<span class="line-command">${enhancedLine}</span>`;
+                            } else if (text.trim() !== '') {
+                                // It's output (and not empty)
+                                return `<span class="line-output">${line}</span>`;
+                            }
+                            return line; // Empty line
+                        });
+                        
+                        codeElement.innerHTML = processedLines.join('\n');
+                    }
+                }
+            });
+
+            // --- Admonition / Callout Logic ---
+            document.querySelectorAll('blockquote').forEach((blockquote) => {
+                const firstP = blockquote.querySelector('p');
+                if (!firstP) return;
+
+                const innerHTML = firstP.innerHTML;
+                const match = innerHTML.match(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]/i);
+
+                if (match) {
+                    const type = match[1].toLowerCase();
+                    let contentHTML = innerHTML.replace(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*/i, '');
+                    
+                    // Create Admonition Structure
+                    const wrapper = document.createElement('div');
+                    wrapper.className = `admonition admonition-${type}`;
+
+                    const title = document.createElement('div');
+                    title.className = 'admonition-title';
+                    
+                    let icon = '';
+                    switch(type) {
+                        case 'note': icon = 'ℹ️'; break;
+                        case 'tip': icon = '💡'; break;
+                        case 'important': icon = '🔥'; break;
+                        case 'warning': icon = '⚠️'; break;
+                        case 'caution': icon = '🛑'; break;
+                    }
+                    
+                    // --- Custom Title Extraction ---
+                    const titleMatch = contentHTML.match(/^<strong>(.*?)<\/strong>[:\s]*/i);
+                    let displayTitle = type;
+                    if (titleMatch) {
+                        displayTitle = titleMatch[1];
+                        contentHTML = contentHTML.replace(/^<strong>.*?<\/strong>[:\s]*/i, '');
+                    }
+                    
+                    title.textContent = `${icon} ${displayTitle}`;
+
+                    const content = document.createElement('div');
+                    content.className = 'admonition-content';
+                    
+                    // Update first paragraph content
+                    if (contentHTML.trim() === '') {
+                        firstP.remove();
+                    } else {
+                        firstP.innerHTML = contentHTML;
+                    }
+
+                    // Move all children of blockquote to content
+                    while (blockquote.firstChild) {
+                        content.appendChild(blockquote.firstChild);
+                    }
+
+                    wrapper.appendChild(title);
+                    wrapper.appendChild(content);
+
+                    // Replace blockquote with new wrapper
+                    blockquote.parentNode?.replaceChild(wrapper, blockquote);
+                }
+            });
+        </script>
 	</body>
 </html>

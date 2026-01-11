@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
@@ -16,99 +15,182 @@ const posts = (await getCollection('blog')).sort(
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
+        <style>
+            /* Layout Transitions */
+            #blog-list {
+                @apply list-none p-0 m-0 transition-all duration-300;
+            }
+
+            /* --- List View Styles --- */
+            .list-view {
+                @apply flex flex-col gap-4;
+            }
+            .list-view .post-item {
+                @apply border-b border-ctp-surface0 pb-4 last:border-0;
+            }
+            .list-view .post-link {
+                @apply flex flex-col md:flex-row md:items-baseline gap-1 md:gap-6 no-underline border-none;
+            }
+            .list-view .post-img-wrapper {
+                @apply hidden;
+            }
+            .list-view .post-date {
+                @apply text-ctp-subtext0 font-mono text-sm min-w-[140px];
+            }
+            .list-view .post-title {
+                @apply text-ctp-text text-lg font-medium transition-colors group-hover:text-ctp-mauve group-hover:underline group-hover:decoration-dashed;
+            }
+            .list-view .post-tags {
+                @apply flex gap-2 items-center;
+            }
+
+            /* --- Card View Styles --- */
+            .card-view {
+                @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8;
+            }
+            .card-view .post-item {
+                @apply flex flex-col border border-ctp-surface0 rounded-xl overflow-hidden bg-ctp-mantle transition-all duration-300 hover:-translate-y-2 hover:border-ctp-mauve hover:shadow-2xl hover:shadow-ctp-mauve/10;
+            }
+            .card-view .post-link {
+                @apply flex flex-col h-full no-underline border-none;
+            }
+            .card-view .post-img-wrapper {
+                @apply w-full aspect-video overflow-hidden border-b border-ctp-surface0;
+            }
+            .card-view .post-img {
+                @apply w-full h-full object-cover transition-transform duration-700 hover:scale-110;
+            }
+            .card-view .post-content {
+                @apply p-6 flex flex-col flex-grow;
+            }
+            .card-view .post-date {
+                @apply text-xs text-ctp-subtext0 mb-2 block font-mono;
+            }
+            .card-view .post-title {
+                @apply text-xl font-bold text-ctp-mauve mb-3 leading-tight block;
+            }
+            .card-view .post-tags {
+                @apply flex flex-wrap gap-2 mt-auto pt-4;
+            }
+
+            /* Common Tag Style */
+            .tag {
+                @apply bg-ctp-surface0 text-ctp-blue px-2 py-0.5 rounded text-[10px] uppercase tracking-wider font-bold border border-ctp-surface1/50;
+            }
+
+            .no-results {
+                @apply hidden text-center text-ctp-subtext0 mt-12 italic font-mono;
+            }
+        </style>
 	</head>
-	<body>
+	<body class="bg-ctp-base text-ctp-text font-mono leading-relaxed">
 		<Header />
-		<main>
+		<main class="w-full max-w-[1100px] mx-auto px-5 md:px-10 py-5">
 			<section>
-				<ul>
+                <div class="flex justify-between items-end mb-10 flex-wrap gap-4">
+                    <div class="flex flex-col gap-3 flex-1">
+                        <div class="text-ctp-pink font-mono font-bold text-sm tracking-tight">/var/www/html/blog/</div>
+                        <div class="flex items-center max-w-[400px] w-full relative">
+                            <span class="absolute left-3 text-ctp-subtext0">$</span>
+                            <input type="text" id="search-input" class="bg-ctp-mantle border border-ctp-surface0 text-ctp-text pl-8 pr-4 py-2 rounded-lg font-mono text-sm w-full outline-none transition-all focus:border-ctp-mauve focus:ring-1 focus:ring-ctp-mauve/30 shadow-inner" placeholder="grep 'pattern' *" aria-label="Search posts">
+                        </div>
+                    </div>
+                    <button id="view-toggle" class="bg-ctp-surface0 border border-ctp-surface1 text-ctp-text px-4 py-2 cursor-pointer font-mono text-xs rounded-lg transition-all hover:bg-ctp-surface1 hover:border-ctp-mauve shadow-sm">[ VIEW: LIST ]</button>
+                </div>
+
+				<ul id="blog-list" class="list-view">
 					{
 						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
+							<li class="post-item">
+								<a href={`/blog/${post.id}/`} class="post-link group">
+                                    <div class="post-img-wrapper">
+                                        {post.data.heroImage && (
+                                            <img 
+                                                class="post-img" 
+                                                src={post.data.heroImage} 
+                                                alt="" 
+                                            />
+                                        )}
+                                    </div>
+                                    <div class="post-content">
+                                        <div class="post-date-wrapper">
+                                            <span class="post-date">
+                                                <FormattedDate date={post.data.pubDate} />
+                                            </span>
+                                        </div>
+                                        <span class="post-title">{post.data.title}</span>
+                                        {post.data.tags && post.data.tags.length > 0 && (
+                                            <div class="post-tags">
+                                                {post.data.tags.map((tag) => (
+                                                    <span class="tag">#{tag}</span>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
 								</a>
 							</li>
 						))
 					}
 				</ul>
+                <div id="no-results" class="no-results">
+                    <p>Error: No matches found for your query.</p>
+                </div>
 			</section>
 		</main>
 		<Footer />
+
+        <script>
+            const toggleButton = document.getElementById('view-toggle');
+            const blogList = document.getElementById('blog-list');
+
+            const currentView = localStorage.getItem('blog-view') || 'list';
+            setMode(currentView);
+
+            toggleButton?.addEventListener('click', () => {
+                const isList = blogList?.classList.contains('list-view');
+                const newMode = isList ? 'card' : 'list';
+                setMode(newMode);
+            });
+
+            function setMode(mode: string) {
+                if (mode === 'card') {
+                    blogList?.classList.remove('list-view');
+                    blogList?.classList.add('card-view');
+                    if(toggleButton) toggleButton.textContent = '[ VIEW: CARD ]';
+                } else {
+                    blogList?.classList.remove('card-view');
+                    blogList?.classList.add('list-view');
+                    if(toggleButton) toggleButton.textContent = '[ VIEW: LIST ]';
+                }
+                localStorage.setItem('blog-view', mode);
+            }
+
+            const searchInput = document.getElementById('search-input') as HTMLInputElement;
+            const postItems = document.querySelectorAll('.post-item');
+            const noResults = document.getElementById('no-results');
+
+            searchInput?.addEventListener('input', (e) => {
+                const query = (e.target as HTMLInputElement).value.toLowerCase();
+                let visibleCount = 0;
+
+                postItems.forEach((item) => {
+                    const title = item.querySelector('.post-title')?.textContent?.toLowerCase() || '';
+                    const tags = Array.from(item.querySelectorAll('.tag'))
+                        .map(t => t.textContent?.toLowerCase() || '')
+                        .join(' ');
+                    
+                    if (title.includes(query) || tags.includes(query)) {
+                        (item as HTMLElement).style.display = '';
+                        visibleCount++;
+                    } else {
+                        (item as HTMLElement).style.display = 'none';
+                    }
+                });
+
+                if (noResults) {
+                    noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+                }
+            });
+        </script>
 	</body>
 </html>

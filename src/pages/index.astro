@@ -2,7 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 ---
 
 <!doctype html>
@@ -10,39 +10,128 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
-	<body>
+	<body class="bg-ctp-base text-ctp-text font-mono leading-relaxed">
 		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+		<main class="w-full max-w-[1100px] mx-auto py-5 px-10 md:px-10">
+            <!-- Hero Section -->
+            <header class="text-center mb-12">
+                <pre class="text-[0.6em] md:text-[0.8em] text-ctp-subtext0 overflow-x-auto leading-[1.1] font-bold inline-block mx-auto text-left opacity-80">
+██╗   ██╗███████╗██████╗ ██████╗ ██╗  ██╗
+╚██╗ ██╔╝██╔════╝██╔══██╗██╔══██╗██║  ██║
+ ╚████╔╝ ███████╗██████╔╝██║  ██║███████║
+  ╚██╔╝  ╚════██║██╔══██╗██║  ██║██╔══██║
+   ██║   ███████║██║  ██║██████╔╝██║  ██║
+   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝
+                </pre>
+                <div class="typewriter mt-4">
+                    <h1 class="text-2xl md:text-3xl font-bold text-ctp-mauve">YASRI RIDHO PAHLEVI</h1>
+                </div>
+                <p class="text-ctp-subtext1 font-bold mt-1 text-sm md:text-base">[ Malware Analyst | Cybersecurity Specialist | Informatics Graduate ]</p>
+                <p class="text-ctp-subtext0 text-xs md:text-sm mt-2 font-mono">
+                    <span class="opacity-70">Status:</span> <span class="text-ctp-green font-bold">AVAILABLE FOR HIRE</span> 
+                    <span class="mx-2 opacity-30">|</span> 
+                    <span class="opacity-70">Location:</span> <span class="text-ctp-text">Bandung, ID</span>
+                </p>
+            </header>
+        
+            <div class="section">
+                <div class="section-header">01_EXECUTIVE_SUMMARY.txt</div>
+                <p><strong>Goal-driven Cybersecurity Analyst</strong> with a strong foundation in Informatics and specialized training in <strong>Red Team Operations</strong> and <strong>Blue Team Defense</strong>. </p>
+                <p>I am actively building my expertise in <strong>Malware Analysis</strong> and <strong>Threat Simulation</strong>, applying a deep curiosity for software behavior to learn how to detect, analyze, and mitigate advanced threats. I am seeking a role where I can contribute my high enthusiasm, analytical mindset, and foundational skills in dynamic analysis and network forensics to protect critical digital assets while continuing to grow.</p>
+                <p class="mt-5"><strong>Key Value Proposition:</strong></p>
+                <ul class="list-none p-0">
+                    <li><span class="text-ctp-green">[+]</span> <strong>Analytical Mindset:</strong> Developing the ability to dissect complex malware samples (e.g., Meterpreter reverse shells) to understand infection chains.</li>
+                    <li><span class="text-ctp-green">[+]</span> <strong>Technical Proficiency:</strong> Hands-on experience with industry-standard tools like Flare-VM, Wireshark, and Metasploit.</li>
+                    <li><span class="text-ctp-green">[+]</span> <strong>Continuous Learner:</strong> Actively upskilling through intensive bootcamps and practical lab simulations.</li>
+                </ul>
+            </div>
+        
+            <div class="section">
+                <div class="section-header">02_SKILLS_MATRIX.exe</div>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <strong>Malware Analysis</strong>
+                        <span>Flare-VM, Procmon, ProcDot, VirusTotal, YARA, PEStudio</span>
+                    </div>
+                    <div class="skill-item">
+                        <strong>Network Defense</strong>
+                        <span>Wireshark, TCPView, Traffic Analysis, Firewall Evasion</span>
+                    </div>
+                    <div class="skill-item">
+                        <strong>Offensive Security</strong>
+                        <span>Metasploit, Burp Suite, Nmap, Payload Generation</span>
+                    </div>
+                    <div class="skill-item">
+                        <strong>Infrastructure</strong>
+                        <span>Docker, AWS, Linux Administration, Supabase</span>
+                    </div>
+                    <div class="skill-item">
+                        <strong>Development</strong>
+                        <span>Python (Automation), C/C++, Java, SQL, JavaScript</span>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="section">
+                <div class="section-header">03_MISSION_LOGS.dat</div>
+                
+                <div class="project-card">
+                    <h3>🦠 Featured Project: Malware Analysis & Simulation</h3>
+                    <p><strong>Objective:</strong> End-to-end technical analysis of a custom <strong>Reverse HTTPS Stager</strong> to emulate advanced persistent threat (APT) behaviors.</p>
+                    <ul class="list-none p-0 text-ctp-subtext0 mb-4">
+                        <li>&gt; <strong>Execution:</strong> Detonated <code>ysrdh.exe</code> payload in a hardened <strong>Flare-VM</strong> sandbox environment.</li>
+                        <li>&gt; <strong>Analysis:</strong> Utilized <strong>Procmon</strong> and <strong>Wireshark</strong> to map process injection and C2 communication (Port 8080).</li>
+                        <li>&gt; <strong>Reporting:</strong> Documented IOCs, registry modifications (<code>ZoneMap</code>), and persistence mechanisms.</li>
+                    </ul>
+                    <a href="/blog/malware-analysis-flare-vm" class="malware-report-btn">VIEW TECHNICAL REPORT & IOCs &gt;&gt;</a>
+                </div>
+        
+                <div class="project-card">
+                    <h3>💻 Technical Tools & Research</h3>
+                    <p class="mb-1.5">Building specialized tools for security research and data integrity.</p>
+                    <p>
+                        <strong><a href="https://github.com/yasridho/HashingComparison">[LINK] Database Vulnerability Inspector</a></strong><br />
+                        <span class="tag">Security Education</span> <span class="tag">SvelteKit</span> <span class="tag">Cryptography</span><br />
+                        <span class="text-[0.8em] text-ctp-subtext0">An educational tool demonstrating the security impact of different password storage methods. Compares <strong>Plaintext</strong> (Dangerous), <strong>MD5</strong> (Vulnerable), and <strong>Bcrypt</strong> (Secure) in real-time. Features a live database inspector to visualize hashes, salting, and work factors.</span>
+                    </p>
+                </div>
+            </div>
+        
+            <div class="section">
+                <div class="section-header">04_CREDENTIALS.log</div>
+                <div class="mb-5">
+                    <p class="mb-1.5"><strong>&gt; Dibimbing.id, Cybersecurity Bootcamp</strong> <span class="text-ctp-subtext0 float-none md:float-right block md:inline">(Oct 2025 – Present)</span></p>
+                    <p class="text-ctp-subtext1 mt-0">Comprehensive training in Red Team operations, Blue Team defense strategies, and practical Malware Analysis.</p>
+                </div>
+                
+                <div>
+                    <p class="mb-1.5"><strong>&gt; Telkom University, Bachelor of Informatics</strong> <span class="text-ctp-subtext0 float-none md:float-right block md:inline">(Aug 2018 – Nov 2025)</span></p>
+                    <p class="text-ctp-subtext1 mt-0">Core Coursework: Operating Systems, Computer Networks, AI, Machine Learning.</p>
+                </div>
+                
+                <hr class="border-ctp-surface0 border-dashed my-5">
+                
+                <p><strong>[PROFESSIONAL CERTIFICATES]</strong></p>
+                <ul class="list-none p-0">
+                    <li><span class="text-ctp-green">[OK]</span> Cyber Security 101 (TryHackMe)</li>
+                    <li><span class="text-ctp-green">[OK]</span> Google IT Support Professional Certificate (Coursera)</li>
+                    <li><span class="text-ctp-green">[OK]</span> Python Programming Proficiency (HackerRank)</li>
+                </ul>
+            </div>
+        
+            <div class="section border-b-0">
+                <div class="section-header">05_INITIATE_CONTACT.sh</div>
+                <p>Ready to secure your infrastructure? Let's discuss how I can contribute to your security team.</p>
+                <div class="flex gap-5 flex-wrap mt-4">
+                    <a href="mailto:yasridho@gmail.com">[ EMAIL_ME ]</a>
+                    <a href="https://linkedin.com/in/yasridho" target="_blank">[ LINKEDIN_PROFILE ]</a>
+                    <a href="https://github.com/yasridho" target="_blank">[ GITHUB_WORK ]</a>
+                </div>
+            </div>
+        
+            <div class="prompt">
+                <span class="user">root</span>@<span class="host">yasridho-portfolio</span>:<span class="path">~</span># exit<span class="cursor"></span>
+            </div>
 		</main>
 		<Footer />
 	</body>
