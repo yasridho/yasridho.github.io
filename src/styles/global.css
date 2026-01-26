@@ -42,12 +42,41 @@
     --font-stack: 'JetBrains Mono', 'Fira Code', 'Courier New', Courier, monospace;
   }
 
+  html[data-theme='light'] {
+    --ctp-rosewater: #dc8a78;
+    --ctp-flamingo: #dd7878;
+    --ctp-pink: #ea76cb;
+    --ctp-mauve: #8839ef;
+    --ctp-red: #d20f39;
+    --ctp-maroon: #e64553;
+    --ctp-peach: #fe640b;
+    --ctp-yellow: #df8e1d;
+    --ctp-green: #40a02b;
+    --ctp-teal: #179299;
+    --ctp-sky: #04a5e5;
+    --ctp-sapphire: #209fb5;
+    --ctp-blue: #1e66f5;
+    --ctp-lavender: #7287fd;
+    --ctp-text: #4c4f69;
+    --ctp-subtext1: #5c5f77;
+    --ctp-subtext0: #6c6f85;
+    --ctp-overlay2: #7c7f93;
+    --ctp-overlay1: #8c8fa1;
+    --ctp-overlay0: #9ca0b0;
+    --ctp-surface2: #acb0be;
+    --ctp-surface1: #bcc0cc;
+    --ctp-surface0: #ccd0da;
+    --ctp-base: #eff1f5;
+    --ctp-mantle: #e6e9ef;
+    --ctp-crust: #dce0e8;
+  }
+
   body {
     @apply bg-ctp-base text-ctp-text font-mono leading-relaxed overflow-x-hidden m-0 p-0;
   }
 
   a {
-    @apply text-ctp-blue no-underline border-b border-dashed border-ctp-subtext0 transition-all duration-200 hover:text-ctp-mauve hover:border-ctp-mauve;
+    @apply text-ctp-blue no-underline transition-all duration-200 hover:text-ctp-mauve;
   }
 
   h1, h2, h3 {
@@ -194,47 +223,6 @@
   .admonition-important { --admonition-color: #cba6f7; border-left-color: #cba6f7; }
   .admonition-warning { --admonition-color: #f9e2af; border-left-color: #f9e2af; }
   .admonition-caution { --admonition-color: #f38ba8; border-left-color: #f38ba8; }
-
-  /* Code Blocks */
-  .code-wrapper {
-    @apply my-5 border border-ctp-surface0 rounded-md bg-ctp-mantle shadow-lg overflow-hidden relative;
-  }
-
-  .code-header {
-    @apply flex justify-between items-center bg-ctp-surface0 px-3 py-1.5 border-b border-ctp-base font-mono text-[0.75em] text-ctp-subtext0;
-  }
-
-  .copy-btn {
-    @apply bg-transparent border border-ctp-surface1 text-ctp-subtext0 px-2 py-0.5 rounded cursor-pointer text-[0.85em] transition-all duration-200 hover:bg-ctp-surface1 hover:text-ctp-text;
-  }
-
-  .code-content {
-    @apply flex overflow-x-auto;
-  }
-
-  .line-numbers {
-    @apply flex-shrink-0 py-4 px-2.5 text-right bg-ctp-base text-ctp-overlay0 border-r border-ctp-surface0 select-none font-mono text-[0.9em] leading-relaxed;
-  }
-
-  .code-content pre {
-    @apply !m-0 !p-4 grow !bg-transparent !border-none !overflow-visible;
-  }
-
-  .code-content pre code {
-    @apply font-mono text-[0.9em] leading-relaxed block bg-transparent p-0 rounded-none text-inherit;
-  }
-
-  .command-prompt {
-    @apply text-ctp-mauve select-none mr-1 font-bold;
-  }
-
-  .line-command {
-    @apply text-ctp-text;
-  }
-
-  .line-output {
-    @apply opacity-65;
-  }
 
   .prose img {
     @apply block mx-auto my-[30px] max-w-full h-auto rounded border border-ctp-surface0;

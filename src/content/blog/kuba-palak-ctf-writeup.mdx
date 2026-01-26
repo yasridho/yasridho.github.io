@@ -67,7 +67,7 @@ $(document).on("click", "a.scroll-to-top", function (e) {
 
 When decoded with Base64, it produced: `_tidak_ada_yg_aman`.
 
-Finally, we combined them to form the flag. <br>
+Finally, we combined them to form the flag. <br />
 **Flag**: **`Foresty2019{Foresty101_tidak_ada_yg_aman}`**.
 
 ---
@@ -145,9 +145,10 @@ After submitting, the web displayed the real flag.
 Given a file. Since the title says it's **not** a pcap file, we opened it using `strings`.
 Because the title suggests it, we used `strings` and then `grep 2019` because there was too much output.
 
-```bash
-$ strings SkypeIRC.cap | grep 2019
-Foresty2019{file_in_wireshark_easy1}
+```bash title="user@kali:~/Downloads" frame="terminal"
+strings SkypeIRC.cap | grep 2019
+# Output:
+# Foresty2019{file_in_wireshark_easy1}
 ```
 
 **Flag**: **`Foresty2019{file_in_wireshark_easy1}`**
@@ -166,17 +167,21 @@ Since it forced uppercase, we tried accessing variables that are naturally upper
 
 Finally, we used `$0` to execute the shell itself again. This allowed us to execute commands with lowercase.
 
-```bash
-$ nc 13.76.181.86:8100
-[!] Connecting to server..
-[*] Switching to interactive mode
-$ $USER
-sh: 1: nobody: not found
-$ $HOME
-sh: 1: /nonexistent: not found
-$ $0
-$ cat flag.txt
-Foresty2019{5a399860ecef529b27d390a1241dc688}
+```bash title="nc 13.76.181.86 8100" frame="terminal"
+nc 13.76.181.86:8100
+# Output:
+# [!] Connecting to server..
+# [*] Switching to interactive mode
+$USER
+# Output:
+# sh: 1: nobody: not found
+$HOME
+# Output:
+# sh: 1: /nonexistent: not found
+$0
+cat flag.txt
+# Output:
+# Foresty2019{5a399860ecef529b27d390a1241dc688}
 ```
 
 **Flag**: `Foresty2019{5a399860ecef529b27d390a1241dc688}`
@@ -233,22 +238,22 @@ Emuqzcxm kbh xmv? jmur, uvk nynsvai :
 Sbdmubl2019{Z1oqp_NbE_Xghm}
 ```
 
-**Step 1:** Decode the first text (Base64) -> `b32 -> 3x`. <br>
-**Step 2:** Decode the second text with **Base32** (3 times). Result: _"MICINN merupakan kunci untuk membuat makanan menjadi lebih nikmat."_ <br>
+**Step 1:** Decode the first text (Base64) -> `b32 -> 3x`. <br />
+**Step 2:** Decode the second text with **Base32** (3 times). Result: _"MICINN merupakan kunci untuk membuat makanan menjadi lebih nikmat."_ <br />
 **Step 3:** "MICINN" seems to be the key. The third text looks like a Vigenère Cipher.
 
-Decoded with Vigenère Cipher (Key: `MICINN`): _"Sesimple itu kan? hehe, ini flagnya :_<br>
+Decoded with Vigenère Cipher (Key: `MICINN`): _"Sesimple itu kan? hehe, ini flagnya :_<br />
 **Flag**: **`Foresty2019{M1cin_FoR_Lyfe}`**"
 
 ---
 
 ### Selamat-datang-crypto
 
-Given encrypted text: ``u@C6DEJa_`hLrCJ!E_:$7F?N``<br>
+Given encrypted text: ``u@C6DEJa_`hLrCJ!E_:$7F?N``<br />
 Hint: reddit.com/r/MRcryptography/comments/642mav/ciphers/
 
 Following the link, we found "Navajo Code".
-Using <https://cryptii.com/navajo/text>:
+Using [https://cryptii.com/navajo/text](https://cryptii.com/navajo/text):
 
 1. Open link.
 2. Change Interpret As to **ROT13**.
@@ -269,15 +274,15 @@ Using <https://cryptii.com/navajo/text>:
 Given a PCAP file. We opened it with **Wireshark**.
 Clue mentions "post". We searched for suspicious `POST` requests.
 
-We found a POST to `http://192.168.56.110/login.php`.<br>
-Parameters: <br>
-`secret=Rm9yZXN0eTIwMTl7aHQ3cF9wMCR0X1IzcXVlc1RfaXNfbTNtM30=` <br>
-`username=ucok` <br>
+We found a POST to `http://192.168.56.110/login.php`.<br />
+Parameters: <br />
+`secret=Rm9yZXN0eTIwMTl7aHQ3cF9wMCR0X1IzcXVlc1RfaXNfbTNtM30=` <br />
+`username=ucok` <br />
 `password=password`
 
 <img src="/images/KubaPalakCTFWriteup/image5.png" alt="Wireshark pcap parameter" />
 
-The `secret` parameter looked like Base64. Decoding it gave the flag. <br>
+The `secret` parameter looked like Base64. Decoding it gave the flag. <br />
 **Flag**: **`Foresty2019{ht7p_p0$t_R3quesT_is_m3m3}`**
 
 ---
@@ -298,5 +303,5 @@ It contained a RAR file inside. Extracting it revealed `flag.txt`.
 Content: `Sberfgl2019{5hZorE_vaSbez4gvx4_4q414u_AthYvx_Fraq1e1}`.
 The title "Sisipin 13x" hints at **ROT13**.
 
-Decoding with ROT13: <br>
+Decoding with ROT13: <br />
 **Flag**: **`Foresty2019{5uMbeR_inForm4tik4_4d414h_NguLik_Send1r1}`**

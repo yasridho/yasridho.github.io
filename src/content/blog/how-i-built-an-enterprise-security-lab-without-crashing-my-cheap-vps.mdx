@@ -1,0 +1,145 @@
+---
+title: "How I Built an Enterprise Security Lab Without Crashing My $5 VPS"
+description: "Why running a SIEM on 2GB of RAM is a suicide mission, and how to use a Hub & Spoke architecture to do it right."
+pubDate: "Jan 25 2026"
+heroImage: "/images/WazuhSetup/wazuh-header-image.webp"
+tags: ["homelab", "wazuh", "cybersecurity", "docker", "tailscale"]
+---
+
+import VPSHostArchitectureDiagram from "../../components/diagrams/VPSHostArchitectureDiagram.astro";
+
+I didn't buy a VPS just to have one. I bought it to solve a specific problem with Discord bots.
+
+I run n8n locally for automation, but Discord slash commands require a public HTTPS endpoint to receive interactions. Tunnels are unstable, so I needed a cloud server to host a `discord.js` bot that acts as a middleman. That is a topic for another article, but the result is that I have a VPS with 2 vCPUs and 2 GiB of RAM.
+
+Since I am currently learning Wazuh in my cybersecurity bootcamp, I decided to deploy it on this server to get some hands-on experience.
+
+The instinctive move? "I will just `docker-compose up` the Wazuh server on my VPS alongside my other apps!"
+
+**Stop.** That is the sound of the server crashing.
+
+Here is the story of how I almost killed my server, the "Crash Loop" caused by bad AI advice, and the hybrid architecture I eventually built.
+
+## The Reality Check: 2GB vs. Java
+
+Here is the problem: Wazuh is heavy. Its backend (OpenSearch) runs on Java. It demands 4GB+ of RAM just to start.
+
+If I tried to force Wazuh onto my 2GB VPS, the Linux **OOM (Out of Memory) Killer** would step in and terminate my processes to save the kernel. It would kill Wazuh, it would kill my n8n workflows, and it would leave me with a dead server.
+
+I needed a smarter way. I needed to separate the **Brain** from the **Body**.
+
+## The Solution: The "Hub & Spoke" Hybrid Cloud
+
+Instead of hosting everything in the cloud, I realized I already had a powerful server: **My Local PC.** (I run Arch Linux/CachyOS, so performance is not an issue).
+
+I decided to split the infrastructure:
+
+1. **The Hub (Blue Team HQ):** My local PC runs the heavy Wazuh Manager & Dashboard (Single-Node Docker).
+2. **The Spoke (The Target):** My VPS runs only the lightweight Wazuh Agent.
+3. **The Tunnel:** Connected securely via **Tailscale**.
+
+<VPSHostArchitectureDiagram />
+<p align="center">
+  <i>Figure 1: The Hybrid "Hub & Spoke" Architecture.</i>
+</p>
+
+## Step 1: Building the Invisible Bridge (Tailscale)
+
+I could not just point my VPS to my home IP because of security risks and dynamic IP headaches. I needed a private mesh network. Enter **Tailscale**.
+
+On both my VPS and my local machine, I installed Tailscale. In minutes I had a private and encrypted network where my devices could talk to each other using `100.x.y.z` addresses.
+
+- **VPS Tailscale IP:** `100.x.x.1` (The Target)
+- **Home PC Tailscale IP:** `100.x.x.2` (The Manager)
+
+Now my Wazuh traffic flows through this tunnel and is invisible to hackers scanning my public ports.
+
+## Step 2: The Command Center (And The Crash Loop)
+
+This part was harder than it looked. Initially, I asked Gemini AI to generate a `docker-compose.yml` to spin up the Manager, Indexer, and Dashboard.
+
+It was a disaster. The dashboard container kept crashing with an `ENOENT: no such file or directory` error regarding `opensearch_dashboards.yml`. It turned out to be a complex persistence bug: the container would restart, see old data in the volume, assume it was already installed, and skip generating the config file.
+
+I spent time debugging the AI's generated code and fighting volume permissions before I realized I was reinventing the wheel.
+
+### The Fix: Use the Official Repo
+
+I trashed the AI-generated config and went straight to the source: the [official wazuh-docker repository](https://github.com/wazuh/wazuh-docker).
+
+They handle the heavy lifting correctly out of the box, including certificates, volume persistence, and networking.
+
+1. **Clone the repo:**
+
+   ```bash title="bash" frame="terminal"
+   git clone --depth 1 https://github.com/wazuh/wazuh-docker.git -b v4.14.2
+   cd wazuh-docker/single-node
+   ```
+
+2. **Generate Self-Signed Certificates:**
+   The new stack requires certificates to be present _before_ boot. The repo includes a tool for this.
+
+   ```bash title="bash" frame="terminal"
+   docker-compose -f generate-indexer-certs.yml run --rm generator
+   # Output:
+   # [+] Certificates generation started...
+   # [+] Certificates generated successfully.
+   ```
+
+3. **Launch:**
+
+   ```bash title="bash" frame="terminal"
+   docker-compose up -d
+   # Output:
+   # [+] Running 3/3
+   # ✔ Container wazuh-indexer    Started
+   # ✔ Container wazuh-manager    Started
+   # ✔ Container wazuh-dashboard  Started
+   ```
+
+It just worked. No crash loops. No missing config files. My dashboard was live at `https://localhost`.
+
+<p align="center">
+  <img src="/images/WazuhSetup/dashboard_live.png" width="80%" />
+  <br />
+  <i>Figure 2: The local Wazuh Dashboard is up and running.</i>
+</p>
+
+## Step 3: The Watchtower (Agent on VPS)
+
+Back on the VPS, I installed the **Wazuh Agent**. This is a tiny piece of software (~50MB RAM) that watches logs, file integrity, and command execution.
+
+The magic trick was linking it to my home PC via the secure tunnel:
+
+```bash title="root@vps:~" frame="terminal"
+WAZUH_MANAGER="100.x.x.2" apt-get install wazuh-agent
+# Output:
+# Setting up wazuh-agent...
+# Wazuh agent service started.
+```
+
+Instantly, the agent reported in. My local dashboard lit up. I was now monitoring my cloud server from my bedroom without opening a single firewall port on my home router.
+
+<p align="center">
+  <img src="/images/WazuhSetup/summary_menu_agents_manager.png" width="80%" />
+  <br />
+  <i>Figure 3: Success! The cloud VPS is now reporting to the local dashboard.</i>
+</p>
+
+## The "Purple Team" Workflow
+
+This setup unlocked a perfect learning environment for **Red Teaming (Attacking)** vs **Blue Teaming (Defending)**.
+
+Because my local machine has "Multiple Personality Disorder" (in a good way), I can do this:
+
+1. **Red Hat (Attacker):** I use my terminal to launch an Nmap scan against the VPS's **Public IP**. This simulates a real internet threat.
+2. **Blue Hat (Defender):** I watch my Wazuh Dashboard (connected via **Tailscale**) to see if the alerts trigger.
+
+If I scanned the Tailscale IP then I would be cheating by bypassing firewalls. By attacking the Public IP but monitoring via the Private IP, I have a pristine and conflict-free simulation lab.
+
+## Final Thoughts
+
+You don't need a $100/month cloud budget to learn enterprise security. You just need to be smart about **architecture** and humble about **configuration**.
+
+By offloading the heavy processing to my local hardware and using the cloud only as a target, I kept my VPS fast, my wallet happy, and my skills sharp.
+
+And the biggest lesson? Don't blindly trust AI-generated `docker-compose.yml` files for complex distributed systems. The official repository exists for a reason, and using it saved me from a debugging nightmare that had nothing to do with security and everything to do with volume persistence.

@@ -1,0 +1,39 @@
+<button id="theme-toggle" class="bg-transparent border-none text-ctp-subtext0 cursor-pointer font-mono text-[0.85em] transition-colors hover:text-ctp-mauve ml-2.5" aria-label="Toggle Theme">
+    [ THEME: <span id="theme-status">DARK</span> ]
+</button>
+
+<script is:inline>
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeStatus = document.getElementById('theme-status');
+    const htmlElement = document.documentElement;
+
+    // Check local storage or system preference
+    const getPreferredTheme = () => {
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme) {
+            return storedTheme;
+        }
+        return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    };
+
+    const setTheme = (theme) => {
+        if (theme === 'light') {
+            htmlElement.setAttribute('data-theme', 'light');
+            if (themeStatus) themeStatus.textContent = 'LIGHT';
+        } else {
+            htmlElement.removeAttribute('data-theme');
+            if (themeStatus) themeStatus.textContent = 'DARK';
+        }
+        localStorage.setItem('theme', theme);
+    };
+
+    // Initialize
+    setTheme(getPreferredTheme());
+
+    // Event Listener
+    themeToggleBtn?.addEventListener('click', () => {
+        const currentTheme = htmlElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        setTheme(newTheme);
+    });
+</script>
